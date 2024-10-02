@@ -1,8 +1,10 @@
-# TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
-resource "azurerm_resource_group" "TODO" {
-  location = var.location
-  name     = var.name # calling code must supply the name
-  tags     = var.tags
+resource "azurerm_api_connection" "api_connection" {
+  name                = var.name
+  resource_group_name = var.resource_group_name
+  managed_api_id      = var.managed_api_id
+  display_name        = var.display_name
+  tags                = var.tags
+  parameter_values    = var.parameter_values
 }
 
 # required AVM resources interfaces
