@@ -1,3 +1,9 @@
+variable "managed_api_id" {
+  type        = string
+  description = "(Required) The ID of the Managed API which this API Connection is linked to. Changing this forces a new API Connection to be created."
+  nullable    = false
+}
+
 variable "name" {
   type        = string
   description = "(Required) The Name which should be used for this API Connection. Changing this forces a new API Connection to be created."
@@ -8,30 +14,6 @@ variable "resource_group_name" {
   type        = string
   description = "(Required) The name of the Resource Group where this API Connection should exist. Changing this forces a new API Connection to be created."
   nullable    = false
-}
-
-variable "managed_api_id" {
-  type        = string
-  description = "(Required) The ID of the Managed API which this API Connection is linked to. Changing this forces a new API Connection to be created."
-  nullable    = false
-}
-
-variable "display_name" {
-  type        = string
-  description = "(Optional) A display name for this API Connection. Defaults to Service Bus. Changing this forces a new API Connection to be created."
-  default     = "Service Bus"
-}
-
-variable "tags" {
-  description = "(Optional) A mapping of tags which should be assigned to the API Connection."
-  type        = map(string)
-  default     = null
-}
-
-variable "parameter_values" {
-  description = "(Optional) A map of parameter values associated with this API Connection. Changing this forces a new API Connection to be created."
-  type        = map(string)
-  default     = {}
 }
 
 # required AVM interfaces
@@ -102,6 +84,12 @@ DESCRIPTION
   }
 }
 
+variable "display_name" {
+  type        = string
+  default     = "Service Bus"
+  description = "(Optional) A display name for this API Connection. Defaults to Service Bus. Changing this forces a new API Connection to be created."
+}
+
 variable "enable_telemetry" {
   type        = bool
   default     = true
@@ -146,6 +134,12 @@ Controls the Managed Identity configuration on this resource. The following prop
 - `user_assigned_resource_ids` - (Optional) Specifies a list of User Assigned Managed Identity resource IDs to be assigned to this resource.
 DESCRIPTION
   nullable    = false
+}
+
+variable "parameter_values" {
+  type        = map(string)
+  default     = {}
+  description = "(Optional) A map of parameter values associated with this API Connection. Changing this forces a new API Connection to be created."
 }
 
 variable "private_endpoints" {
@@ -236,4 +230,10 @@ A map of role assignments to create on this resource. The map key is deliberatel
 > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
 DESCRIPTION
   nullable    = false
+}
+
+variable "tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) A mapping of tags which should be assigned to the API Connection."
 }
