@@ -6,17 +6,17 @@ This deploys the module in its simplest form.
 
 ```hcl
 terraform {
-  required_version = "~> 1.5"
+  required_version = ">= 1.9, < 2.0"
 
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.74"
+      version = "~> 4.0"
     }
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
+    # modtm = {
+    #   source  = "azure/modtm"
+    #   version = "~> 0.3"
+    # }
     random = {
       source  = "hashicorp/random"
       version = "~> 3.5"
@@ -32,8 +32,8 @@ provider "azurerm" {
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
 module "regions" {
-  source  = "Azure/avm-utl-regions/azurerm"
-  version = "~> 0.1"
+  source  = "Azure/regions/azurerm"
+  version = "0.8.0"
 }
 
 # This allows us to randomize the region for the resource group.
@@ -46,28 +46,30 @@ resource "random_integer" "region_index" {
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "~> 0.3"
+  version = "0.4.2"
 }
 
 # This is required for resource modules
-resource "azurerm_resource_group" "this" {
+resource "azurerm_resource_group" "example" {
   location = module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
 
-# This is the module call
-# Do not specify location here due to the randomization above.
-# Leaving location as `null` will cause the module to use the resource group location
-# with a data source.
+data "azurerm_managed_api" "example" {
+  location = azurerm_resource_group.example.location
+  name     = "azuremonitorlogs"
+}
+
 module "test" {
   source = "../../"
 
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  # ...
-  location            = azurerm_resource_group.this.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
-  resource_group_name = azurerm_resource_group.this.name
+  managed_api_id      = data.azurerm_managed_api.example.id
+  name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  resource_group_name = azurerm_resource_group.example.name
+  display_name        = "Test API Connection"
   enable_telemetry    = var.enable_telemetry # see variables.tf
+  parameter_values    = {}
+  tags                = {}
 }
 ```
 
@@ -76,11 +78,9 @@ module "test" {
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.74)
-
-- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
 
@@ -88,8 +88,9 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_resource_group.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
+- [azurerm_managed_api.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/managed_api) (data source)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
@@ -122,13 +123,13 @@ The following Modules are called:
 
 Source: Azure/naming/azurerm
 
-Version: ~> 0.3
+Version: 0.4.2
 
 ### <a name="module_regions"></a> [regions](#module\_regions)
 
-Source: Azure/avm-utl-regions/azurerm
+Source: Azure/regions/azurerm
 
-Version: ~> 0.1
+Version: 0.8.0
 
 ### <a name="module_test"></a> [test](#module\_test)
 
