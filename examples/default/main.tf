@@ -60,7 +60,7 @@ module "test" {
   name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.example.name
   display_name        = "Test API Connection"
-  enable_telemetry    = var.enable_telemetry # see variables.tf
+  enable_telemetry    = false # see variables.tf
   parameter_values    = {}
   tags                = {}
 }
