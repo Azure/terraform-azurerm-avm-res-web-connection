@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/azure-verified-modules-tools/main/src/Avm.Authoring/Resources/Schemas/v1/avm-module-metadata.schema.json",
+  "moduleDisplayName": "API Connection",
+  "moduleDescription": "AVM Resource Module for API Connection",
+  "canonicalType": "Microsoft.Web/connections",
+  "owners": [
+    "donovm4"
+  ],
+  "telemetryIdPrefix": "46d3xtrf.res.b51b1a5"
+}
