@@ -63,6 +63,7 @@ data "azurerm_managed_api" "example" {
 module "test" {
   source = "../../"
 
+  location            = var.location
   managed_api_id      = data.azurerm_managed_api.example.id
   name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.example.name
@@ -110,6 +111,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: The Azure region for this module's resources or telemetry deployment.
+
+Type: `string`
+
+Default: `"eastus"`
 
 ## Outputs
 

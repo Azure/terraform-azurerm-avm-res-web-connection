@@ -56,6 +56,7 @@ data "azurerm_managed_api" "example" {
 module "test" {
   source = "../../"
 
+  location            = var.location
   managed_api_id      = data.azurerm_managed_api.example.id
   name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.example.name

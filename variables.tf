@@ -1,3 +1,9 @@
+variable "location" {
+  type        = string
+  description = "The Azure region for this module's resources or telemetry deployment."
+  nullable    = false
+}
+
 variable "managed_api_id" {
   type        = string
   description = "(Required) The ID of the Managed API which this API Connection is linked to. Changing this forces a new API Connection to be created."
