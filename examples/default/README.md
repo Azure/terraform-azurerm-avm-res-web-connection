@@ -32,7 +32,7 @@ provider "azurerm" {
 # This allows us to randomize the region for the resource group.
 module "regions" {
   source  = "Azure/regions/azurerm"
-  version = "0.8.0"
+  version = "0.8.2"
 }
 
 # This allows us to randomize the region for the resource group.
@@ -46,7 +46,7 @@ resource "random_integer" "region_index" {
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/avm-utl-naming/azure"
-  version = "0.2.0"
+  version = "0.3.0"
 }
 
 # This is required for resource modules
@@ -63,12 +63,12 @@ data "azurerm_managed_api" "example" {
 module "test" {
   source = "../../"
 
-  location            = var.location
   managed_api_id      = data.azurerm_managed_api.example.id
   name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.example.name
   display_name        = "Test API Connection"
   enable_telemetry    = var.enable_telemetry # see variables.tf
+  location            = var.location
   parameter_values    = {}
   tags                = {}
 }
@@ -132,13 +132,13 @@ The following Modules are called:
 
 Source: Azure/avm-utl-naming/azure
 
-Version: 0.2.0
+Version: 0.3.0
 
 ### <a name="module_regions"></a> [regions](#module\_regions)
 
 Source: Azure/regions/azurerm
 
-Version: 0.8.0
+Version: 0.8.2
 
 ### <a name="module_test"></a> [test](#module\_test)
 
